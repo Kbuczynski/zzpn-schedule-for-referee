@@ -1,3 +1,3 @@
 exports.ADDRESS = 'http://sedzia.net/';
 exports.FILE_NAME = 'obsada.xlsx';
-exports.PORT = process.env.PORT || 8080;
+exports.PORT = process.env.PORT || 3001;
