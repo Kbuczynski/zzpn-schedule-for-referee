@@ -8,6 +8,9 @@
     "dev": "nodemon server/index.js",
     "build": "cd client && npm run build"
   },
+  "engines": {
+    "node": "12.16.2"
+  },
   "author": "@kbuczynski",
   "license": "ISC",
   "dependencies": {
