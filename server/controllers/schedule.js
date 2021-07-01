@@ -25,15 +25,15 @@ exports.getAllMatches = (req, res) => {
             const newestPost = getNewestPost(html);
             const sheetName = getSheetName(newestPost);
 
-            request(newestPost, (err, resp, html) => {
+            request(newestPost, (error, response, html) => {
                 if (!error && response.statusCode === 200) {
                     const $ = cheerio.load(html);
                     const excelFile = $('p.has-text-align-center > a')[0].attribs.href;
 
                     const file = fs.createWriteStream(constants.FILE_NAME);
 
-                    http.get(excelFile, (resp) => {
-                        resp.pipe(file);
+                    http.get(excelFile, (response) => {
+                        response.pipe(file);
                     });
 
                     setTimeout(() => {
@@ -44,7 +44,7 @@ exports.getAllMatches = (req, res) => {
                                 const worksheet = workbook.getWorksheet(sheetName);
                                 const matches = [];
 
-                                worksheet.eachRow({ includeEmpty: false }, function(row) {
+                                worksheet.eachRow({ includeEmpty: false }, function (row) {
                                     if (row.values.includes(searchingName)) {
                                         const match = {
                                             hosts: row.values[2],
@@ -72,6 +72,8 @@ exports.getAllMatches = (req, res) => {
                     }, 1000)
                 }
             })
+
+
         }
     });
 }
