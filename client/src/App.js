@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function App() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [schedule, setSchedule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -11,8 +11,8 @@ function App() {
     setIsLoading(true);
 
     fetch(`/api/schedule/${name}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setSchedule(data);
         setIsLoading(false);
         setIsError(false);
@@ -20,37 +20,44 @@ function App() {
       .catch(() => {
         setIsError(true);
         setIsLoading(false);
-      })
-  }
+      });
+  };
 
   return (
     <div className="App">
       <form>
-        <input type="text" placeholder="Kowalski J" onChange={(e) => setName(e.target.value)} autoFocus />
-        <button onClick={handleClick} type="submit">Wyszukaj</button>
+        <label>Szukaj po nazwie klubu lub nazwisku sędziego: </label>
+        <input
+          type="text"
+          placeholder="Kowalski J"
+          onChange={(e) => setName(e.target.value)}
+          autoFocus
+        />
+        <button onClick={handleClick} type="submit">
+          Wyszukaj
+        </button>
       </form>
 
+      {isLoading && <p>Trwa ładowanie...</p>}
 
-      {
-        isLoading && <p>Trwa ładowanie...</p>
-      }
+      {isError && <p>Brak szukanej osoby w obsadzie lub błąd wyszukiwania.</p>}
 
-      {
-        isError && <p>Brak szukanej osoby w obsadzie lub błąd wyszukiwania</p>
-      }
-
-      {
-        schedule?.map(({ hosts, guests, date, hour, main_referee, assistant_referee_one, assistant_referee_two, address }) => {
-          return <div key={hosts + guests}>
-            <h1>{hosts} vs {guests}</h1>
-            <p>{hour} {date}</p>
-            <p>Główny sędzia: {main_referee}</p>
-            <p>Asystent 1: {assistant_referee_one}</p>
-            <p>Asystent 2: {assistant_referee_two}</p>
-            <p>{address}</p>
+      {schedule.matches?.map((match) => {
+        return (
+          <div key={match.hosts + match.guests}>
+            <h1>
+              {match.hosts} vs {match.guests}
+            </h1>
+            <p>
+              {match.hour} {match.date}
+            </p>
+            <p>Główny sędzia: {match.main_referee}</p>
+            <p>Asystent nr 1: {match.assistant_referee_one}</p>
+            <p>Asystent nr 2: {match.assistant_referee_two}</p>
+            <p>{match.description}</p>
           </div>
-        })
-      }
+        );
+      })}
     </div>
   );
 }
